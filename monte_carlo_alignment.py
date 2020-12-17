@@ -8,11 +8,13 @@ import sys
 
 # returns CA and all atom coordinates
 def pdb_parser(pdb_file_obj):
-    xyz = np.zero(3)
+    xyz = np.zeros(3)
     ca_coords = []
     atom_coords = []
     for line in pdb_file_obj:
         line_arr = line.split()
+        if line_arr[0] == "TER":
+            break
         xyz[0] = line_arr[6]
         xyz[1] = line_arr[7]
         xyz[2] = line_arr[8]
@@ -25,6 +27,6 @@ def pdb_parser(pdb_file_obj):
 
 if __name__ == "__main__":
     input_pdb = open(sys.argv[1], 'r')
-    ca, atom = pdb_parser
+    ca, atom = pdb_parser(input_pdb)
 
     pass
