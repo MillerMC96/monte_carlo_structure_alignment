@@ -25,6 +25,19 @@ def pdb_parser(pdb_file_obj):
     
     return np.array(ca_coords), np.array(atom_coords)
 
+# output to pdb
+def write_to_pdb(input_pdb_obj, aligned_coords, output_pdb_obj):
+    for coord in aligned_coords:
+        line = input_pdb_obj.readline()
+        # delete old coords
+        line[32:54] = ""
+        # replace with new coords
+        line[32] = str(coord[0])
+        line[39] = str(coord[1])
+        line[47] = str(coord[2])
+        # write to output
+        output_pdb_obj.write(line)
+
 # calculate the RMSD between the target and the input
 def get_RMSD(target, input):
     pass
@@ -46,5 +59,6 @@ if __name__ == "__main__":
     target_pdb = open(sys.argv[2], 'r')
     targe_ca, target_atom = pdb_parser(target_pdb)
     # starting Monte Carlo alignment
+    # output the aligned structure to pdb
 
     pass
