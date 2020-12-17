@@ -4,6 +4,7 @@
 # Email: pywang@ucdavis.edu                                                    #
 ################################################################################
 import numpy as np
+import matplotlib.pyplot as plt
 import sys
 
 # returns CA and all atom coordinates
@@ -104,9 +105,15 @@ if __name__ == "__main__":
     #write_to_pdb(input_pdb, input_atom, output_pdb)
 
     # Monte Carlo alignment
-    steps = 100
-    stepsize = 1
+    steps = 10000
+    stepsize = 3
     tol = 0.01
-    input_aligned = MC_alignment(target_ca, input_ca, steps, stepsize, tol)
+    input_aligned, RMSD = MC_alignment(target_ca, input_ca, steps, stepsize, tol)
+    plt.figure()
+    plt.title("RMSD vs steps")
+    plt.xlabel("steps")
+    plt.ylabel("RMSD")
+    plt.plot(RMSD, '-o')
+    plt.show()
 
     pass
