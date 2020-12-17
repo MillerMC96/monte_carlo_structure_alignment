@@ -56,7 +56,13 @@ def get_RMSD(target, input):
 
 # Monte Carlo functions
 def MC_translation(ca_arr, stepsize):
-    pass
+    translation_vec = np.zeros(3)
+    translation_vec[0] = np.random.randn() * stepsize
+    translation_vec[1] = np.random.randn() * stepsize
+    translation_vec[2] = np.random.randn() * stepsize
+    ca_arr_tr = ca_arr + translation_vec
+    
+    return ca_arr_tr
 
 def MC_rotation(ca_arr, stepsize):
     pass
