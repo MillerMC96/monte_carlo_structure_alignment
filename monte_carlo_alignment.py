@@ -69,7 +69,7 @@ def MC_rotation(ca_arr, stepsize):
 
 def MC_alignment(target_arr, input_arr, steps, stepsize, tol):
     # RMSD array for plotting
-    RMSD_arr = np.zeros(steps)
+    RMSD_arr = []
     # initial RMSD
     RMSD_i = get_RMSD(target_arr, input_arr)
     for i in range(steps):
@@ -82,18 +82,18 @@ def MC_alignment(target_arr, input_arr, steps, stepsize, tol):
             # accept the move
             # update limit
             RMSD_i = RMSD
-            # adaptive step size
-            if RMSD_i < 1:
-                stepsize *= 0.8
             # check convergence
             if RMSD < tol:
                 break
         else:
+            # adaptive step size
+            if RMSD < 1:
+                stepsize *= 0.8
             # reject the move
             input_arr -= tr_vec
-        RMSD_arr[i] = RMSD_i
+        RMSD_arr.append(RMSD_i)
 
-    return input_arr, RMSD_arr
+    return input_arr, np.array(RMSD_arr)
 
 if __name__ == "__main__":
     # getting inputs
@@ -109,9 +109,9 @@ if __name__ == "__main__":
     #write_to_pdb(input_pdb, input_atom, output_pdb)
 
     # Monte Carlo alignment
-    steps = 50000
+    steps = 10000
     stepsize = 3
-    tol = 0.1
+    tol = 0.05
     input_aligned, RMSD = MC_alignment(target_ca, input_ca, steps, stepsize, tol)
     plt.figure()
     plt.title("RMSD vs steps")
