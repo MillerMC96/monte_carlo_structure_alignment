@@ -15,9 +15,9 @@ def pdb_parser(pdb_file_obj):
         line_arr = line.split()
         if line_arr[0] == "TER":
             break
-        xyz[0] = line_arr[6]
-        xyz[1] = line_arr[7]
-        xyz[2] = line_arr[8]
+        xyz[0] = float(line_arr[6])
+        xyz[1] = float(line_arr[7])
+        xyz[2] = float(line_arr[8])
         # get C-alphas
         if line_arr[2] == "CA":
             ca_coords.append(xyz)
