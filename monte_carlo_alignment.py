@@ -26,7 +26,10 @@ def pdb_parser(pdb_file_obj):
     return np.array(ca_coords), np.array(atom_coords)
 
 if __name__ == "__main__":
+    # getting inputs
     input_pdb = open(sys.argv[1], 'r')
-    ca, atom = pdb_parser(input_pdb)
+    input_ca, input_atom = pdb_parser(input_pdb)
+    target_pdb = open(sys.argv[2], 'r')
+    targe_ca, target_atom = pdb_parser(input_pdb)
 
     pass
