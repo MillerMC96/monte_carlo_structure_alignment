@@ -106,20 +106,21 @@ if __name__ == "__main__":
     output_pdb = open(sys.argv[3], 'w')
     target_ca, target_atom = pdb_parser(target_pdb)
     # starting Monte Carlo alignment
-    # output the aligned structure to pdb
 
     # Monte Carlo alignment
     steps = 10000
     stepsize = 3
     tol = 0.1
     input_aligned, RMSD = MC_alignment(target_ca, input_ca, input_atom,steps, stepsize, tol)
-    input_pdb.seek(0)
-    write_to_pdb(input_pdb, input_aligned, output_pdb)
+    # plotting RMSD
     plt.figure()
     plt.title("RMSD vs steps")
     plt.xlabel("steps")
     plt.ylabel("RMSD [Å]")
     plt.plot(RMSD, '-o')
     plt.show()
+    # output the aligned structure to pdb
+    input_pdb.seek(0)
+    write_to_pdb(input_pdb, input_aligned, output_pdb)
 
     pass
