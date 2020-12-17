@@ -25,11 +25,26 @@ def pdb_parser(pdb_file_obj):
     
     return np.array(ca_coords), np.array(atom_coords)
 
+# calculate the RMSD between the target and the input
+def get_RMSD(target, input):
+    pass
+
+# Monte Carlo functions
+def MC_translation(ca_arr, stepsize):
+    pass
+
+def MC_rotation(ca_arr, stepsize):
+    pass
+
+def MC_alignment(target_arr, input_arr, steps, stepsize):
+    pass
+
 if __name__ == "__main__":
     # getting inputs
     input_pdb = open(sys.argv[1], 'r')
     input_ca, input_atom = pdb_parser(input_pdb)
     target_pdb = open(sys.argv[2], 'r')
-    targe_ca, target_atom = pdb_parser(input_pdb)
+    targe_ca, target_atom = pdb_parser(target_pdb)
+    # starting Monte Carlo alignment
 
     pass
