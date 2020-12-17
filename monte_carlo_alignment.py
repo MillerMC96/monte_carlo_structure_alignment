@@ -5,6 +5,7 @@
 ################################################################################
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.spatial.transform import Rotation as R
 import sys
 
 # returns CA and all atom coordinates
@@ -67,9 +68,14 @@ def MC_translation(stepsize):
     return translation_vec
 
 def MC_rotation(com, stepsize):
-    rotation_vec = np.random.randn(3) - com
+    # around Z
+    rotation_vec = np.array([com[0], com[1], 0])#np.random.randn(3) - com
+    rotation_angle = np.cos(np.pi / 4) #np.random.randn() * stepsize
+    rotation_quat = np.array(rotation_vec, rotation_angle)
+    # rotation operations
+    r = R.from_quat(rotation_quat)
 
-    pass
+    return r.as_matrix()
 
 def MC_alignment(target_ca_arr, input_ca_arr, input_coord_arr, \
     steps, stepsize, tol):
