@@ -6,6 +6,7 @@
 import numpy as np
 import sys
 
+# returns CA and all atom coordinates
 def pdb_parser(pdb_file_obj):
     xyz = np.zero(3)
     ca_coords = []
@@ -21,4 +22,5 @@ def pdb_parser(pdb_file_obj):
     return np.array(ca_coords)
 
 if __name__ == "__main__":
+    input_pdb = open(sys.argv[1], 'r')
     pass
