@@ -75,21 +75,25 @@ def MC_alignment(target_arr, input_arr, steps, stepsize, tol):
     for i in range(steps):
         # propose a random move
         tr_vec = MC_translation(stepsize)
-        input_arr_proposed = input_arr + tr_vec
-        RMSD = get_RMSD(target_arr, input_arr_proposed)
+        input_arr += tr_vec
+        RMSD = get_RMSD(target_arr, input_arr)
         # if RMSD is decreasing
         if RMSD < RMSD_i:
-            # set new limit
+            # accept the move
+            # update limit
             RMSD_i = RMSD
+            # adaptive step size
+            if RMSD_i < 1:
+                stepsize *= 0.8
             # check convergence
             if RMSD < tol:
                 break
         else:
             # reject the move
-            input_arr_proposed -= tr_vec
+            input_arr -= tr_vec
         RMSD_arr[i] = RMSD_i
 
-    return input_arr_proposed, RMSD_arr
+    return input_arr, RMSD_arr
 
 if __name__ == "__main__":
     # getting inputs
@@ -105,14 +109,14 @@ if __name__ == "__main__":
     #write_to_pdb(input_pdb, input_atom, output_pdb)
 
     # Monte Carlo alignment
-    steps = 10000
+    steps = 50000
     stepsize = 3
-    tol = 0.01
+    tol = 0.1
     input_aligned, RMSD = MC_alignment(target_ca, input_ca, steps, stepsize, tol)
     plt.figure()
     plt.title("RMSD vs steps")
     plt.xlabel("steps")
-    plt.ylabel("RMSD")
+    plt.ylabel("RMSD [Å]")
     plt.plot(RMSD, '-o')
     plt.show()
 
