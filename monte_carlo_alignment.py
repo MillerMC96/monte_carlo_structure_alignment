@@ -67,19 +67,21 @@ def MC_translation(stepsize):
 def MC_rotation(ca_arr, stepsize):
     pass
 
-def MC_alignment(target_arr, input_arr, steps, stepsize, tol):
+def MC_alignment(target_ca_arr, input_ca_arr, input_coord_arr, \
+    steps, stepsize, tol):
     # RMSD array for plotting
     RMSD_arr = []
     # initial RMSD
-    RMSD_i = get_RMSD(target_arr, input_arr)
+    RMSD_i = get_RMSD(target_ca_arr, input_ca_arr)
     for i in range(steps):
         # propose a random move
         tr_vec = MC_translation(stepsize)
-        input_arr += tr_vec
-        RMSD = get_RMSD(target_arr, input_arr)
+        input_ca_arr += tr_vec
+        RMSD = get_RMSD(target_ca_arr, input_ca_arr)
         # if RMSD is decreasing
         if RMSD < RMSD_i:
             # accept the move
+            input_coord_arr += tr_vec
             # update limit
             RMSD_i = RMSD
             # check convergence
@@ -90,10 +92,10 @@ def MC_alignment(target_arr, input_arr, steps, stepsize, tol):
             if RMSD < 1:
                 stepsize *= 0.8
             # reject the move
-            input_arr -= tr_vec
+            input_ca_arr -= tr_vec
         RMSD_arr.append(RMSD_i)
 
-    return input_arr, np.array(RMSD_arr)
+    return input_coord_arr, np.array(RMSD_arr)
 
 if __name__ == "__main__":
     # getting inputs
@@ -101,18 +103,18 @@ if __name__ == "__main__":
     input_ca, input_atom = pdb_parser(input_pdb)
     target_pdb = open(sys.argv[2], 'r')
     # output
-    #output_pdb = open(sys.argv[3], 'w')
+    output_pdb = open(sys.argv[3], 'w')
     target_ca, target_atom = pdb_parser(target_pdb)
     # starting Monte Carlo alignment
     # output the aligned structure to pdb
-    #input_pdb.seek(0)
-    #write_to_pdb(input_pdb, input_atom, output_pdb)
 
     # Monte Carlo alignment
     steps = 10000
     stepsize = 3
-    tol = 0.05
-    input_aligned, RMSD = MC_alignment(target_ca, input_ca, steps, stepsize, tol)
+    tol = 0.1
+    input_aligned, RMSD = MC_alignment(target_ca, input_ca, input_atom,steps, stepsize, tol)
+    input_pdb.seek(0)
+    write_to_pdb(input_pdb, input_aligned, output_pdb)
     plt.figure()
     plt.title("RMSD vs steps")
     plt.xlabel("steps")
