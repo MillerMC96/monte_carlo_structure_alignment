@@ -71,13 +71,13 @@ def MC_translation(stepsize):
 
 def MC_rotation(com, stepsize):
     # around Z
-    rotation_vec = np.array([com[0], com[1], 0])#np.random.randn(3) - com
-    rotation_angle = np.cos(np.pi / 4) #np.random.randn() * stepsize
+    rotation_angle = np.cos(np.pi / 8) #np.random.randn() * stepsize
+    rotation_vec = com #np.random.randn(3) - com
     rotation_quat = np.append(rotation_vec, rotation_angle)
     # rotation operations
     r = R.from_quat(rotation_quat)
 
-    return r.as_matrix()
+    return r
 
 def MC_alignment(target_ca_arr, input_ca_arr, input_coord_arr, \
     steps, stepsize, tol):
@@ -122,23 +122,23 @@ if __name__ == "__main__":
     steps = 10000
     stepsize = 2
     tol = 0.1
-    #input_aligned, RMSD = MC_alignment(target_ca, input_ca, input_atom,steps, stepsize, tol)
-    ## plotting RMSD
-    #plt.figure()
-    #plt.title("RMSD vs steps")
-    #plt.xlabel("steps")
-    #plt.ylabel("RMSD [Å]")
-    #plt.plot(RMSD, '-o')
-    #plt.show()
+    input_aligned, RMSD = MC_alignment(target_ca, input_ca, input_atom,steps, stepsize, tol)
+    # plotting RMSD
+    plt.figure()
+    plt.title("RMSD vs steps")
+    plt.xlabel("steps")
+    plt.ylabel("RMSD [Å]")
+    plt.plot(RMSD, '-o')
+    plt.show()
     # output the aligned structure to pdb
     input_pdb.seek(0)
-    com = get_com(input_ca)
-    rot = MC_rotation(com, 0)
-    input_rot = []
-    for atom in input_atom:
-        input_rot.append(np.matmul(rot, atom))
-    
-    input_rot = np.array(input_rot)
-    write_to_pdb(input_pdb, input_rot, output_pdb)
+    write_to_pdb(input_pdb, input_aligned, output_pdb)
 
+    #com = get_com(input_atom)
+    #rot = MC_rotation(com, 0)
+    #input_rot = []
+    #for atom in input_atom:
+    #    input_rot.append(rot.apply(atom))
+    
+    #input_rot = np.array(input_rot)
     pass
