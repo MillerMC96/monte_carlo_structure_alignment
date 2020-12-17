@@ -28,7 +28,9 @@ def pdb_parser(pdb_file_obj):
     return np.array(ca_coords), np.array(atom_coords)
 
 def coord_to_str(coord):
-    string = str(coord[0]) + " " + str(coord[1]) + " " + str(coord[2])
+    string = "{:.3f}".format(coord[0]) + " " + "{:.3f}".format(coord[1]) +\
+         " " + "{:.3f}".format(coord[2])
+
     return string
 
 # output to pdb
@@ -38,9 +40,9 @@ def write_to_pdb(input_pdb_obj, aligned_coords, output_pdb_obj):
         # convert new coords to str
         aligned_coord_str = coord_to_str(coord) 
         # replace input coords with new coords
-        line.replace(line[32:54], aligned_coord_str)
+        rep_line = line.replace(line[32:54], aligned_coord_str)
         # write to output
-        output_pdb_obj.write(line)
+        output_pdb_obj.write(rep_line)
     output_pdb_obj.write("TER\n")
     output_pdb_obj.write("END\n")
 
@@ -71,7 +73,7 @@ def MC_rotation(com, stepsize):
     # around Z
     rotation_vec = np.array([com[0], com[1], 0])#np.random.randn(3) - com
     rotation_angle = np.cos(np.pi / 4) #np.random.randn() * stepsize
-    rotation_quat = np.array(rotation_vec, rotation_angle)
+    rotation_quat = np.append(rotation_vec, rotation_angle)
     # rotation operations
     r = R.from_quat(rotation_quat)
 
@@ -120,16 +122,23 @@ if __name__ == "__main__":
     steps = 10000
     stepsize = 2
     tol = 0.1
-    input_aligned, RMSD = MC_alignment(target_ca, input_ca, input_atom,steps, stepsize, tol)
-    # plotting RMSD
-    plt.figure()
-    plt.title("RMSD vs steps")
-    plt.xlabel("steps")
-    plt.ylabel("RMSD [Å]")
-    plt.plot(RMSD, '-o')
-    plt.show()
+    #input_aligned, RMSD = MC_alignment(target_ca, input_ca, input_atom,steps, stepsize, tol)
+    ## plotting RMSD
+    #plt.figure()
+    #plt.title("RMSD vs steps")
+    #plt.xlabel("steps")
+    #plt.ylabel("RMSD [Å]")
+    #plt.plot(RMSD, '-o')
+    #plt.show()
     # output the aligned structure to pdb
-    #input_pdb.seek(0)
-    #write_to_pdb(input_pdb, input_aligned, output_pdb)
+    input_pdb.seek(0)
+    com = get_com(input_ca)
+    rot = MC_rotation(com, 0)
+    input_rot = []
+    for atom in input_atom:
+        input_rot.append(np.matmul(rot, atom))
+    
+    input_rot = np.array(input_rot)
+    write_to_pdb(input_pdb, input_rot, output_pdb)
 
     pass
