@@ -105,8 +105,6 @@ if __name__ == "__main__":
     # output
     output_pdb = open(sys.argv[3], 'w')
     target_ca, target_atom = pdb_parser(target_pdb)
-    # starting Monte Carlo alignment
-
     # Monte Carlo alignment
     steps = 10000
     stepsize = 3
@@ -120,7 +118,7 @@ if __name__ == "__main__":
     plt.plot(RMSD, '-o')
     plt.show()
     # output the aligned structure to pdb
-    input_pdb.seek(0)
-    write_to_pdb(input_pdb, input_aligned, output_pdb)
+    #input_pdb.seek(0)
+    #write_to_pdb(input_pdb, input_aligned, output_pdb)
 
     pass
