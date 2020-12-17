@@ -56,20 +56,24 @@ def get_RMSD(target, input):
     return RMSD
 
 # calculate center of mass
-def get_COM(coords):
-    COM = np.mean(coords, axis=0)
-    return COM
+def get_com(coords):
+    com = np.mean(coords, axis=0)
+    return com
 
 # Monte Carlo functions
 def MC_translation(stepsize):
     translation_vec = np.zeros(3)
-    translation_vec[0] = np.random.randn() * stepsize
-    translation_vec[1] = np.random.randn() * stepsize
-    translation_vec[2] = np.random.randn() * stepsize
+    translation_vec = np.random.randn(3) * stepsize
+    #translation_vec[1] = np.random.randn() * stepsize
+    #translation_vec[2] = np.random.randn() * stepsize
 
     return translation_vec
 
-def MC_rotation(stepsize):
+def MC_rotation(com, stepsize):
+    rotation_vec = np.zeros(3)
+    rotation_vec= np.random.randn(3) 
+    #rotation_vec[1] = np.random.randn(3) 
+    #rotation_vec[2] = np.random.randn(3) 
     pass
 
 def MC_alignment(target_ca_arr, input_ca_arr, input_coord_arr, \
@@ -91,6 +95,7 @@ def MC_alignment(target_ca_arr, input_ca_arr, input_coord_arr, \
             RMSD_i = RMSD
             # check convergence
             if RMSD < tol:
+                RMSD_arr.append(RMSD_i)
                 break
         else:
             # adaptive step size
