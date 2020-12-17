@@ -112,7 +112,7 @@ if __name__ == "__main__":
     target_ca, target_atom = pdb_parser(target_pdb)
     # Monte Carlo alignment
     steps = 10000
-    stepsize = 3
+    stepsize = 2
     tol = 0.1
     input_aligned, RMSD = MC_alignment(target_ca, input_ca, input_atom,steps, stepsize, tol)
     # plotting RMSD
