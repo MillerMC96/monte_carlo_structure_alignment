@@ -55,6 +55,11 @@ def get_RMSD(target, input):
 
     return RMSD
 
+# calculate center of mass
+def get_COM(coords):
+    COM = np.mean(coords, axis=0)
+    return COM
+
 # Monte Carlo functions
 def MC_translation(stepsize):
     translation_vec = np.zeros(3)
@@ -64,7 +69,7 @@ def MC_translation(stepsize):
 
     return translation_vec
 
-def MC_rotation(ca_arr, stepsize):
+def MC_rotation(stepsize):
     pass
 
 def MC_alignment(target_ca_arr, input_ca_arr, input_coord_arr, \
