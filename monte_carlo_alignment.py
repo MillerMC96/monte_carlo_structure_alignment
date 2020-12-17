@@ -62,18 +62,13 @@ def get_com(coords):
 
 # Monte Carlo functions
 def MC_translation(stepsize):
-    translation_vec = np.zeros(3)
     translation_vec = np.random.randn(3) * stepsize
-    #translation_vec[1] = np.random.randn() * stepsize
-    #translation_vec[2] = np.random.randn() * stepsize
 
     return translation_vec
 
 def MC_rotation(com, stepsize):
-    rotation_vec = np.zeros(3)
-    rotation_vec= np.random.randn(3) 
-    #rotation_vec[1] = np.random.randn(3) 
-    #rotation_vec[2] = np.random.randn(3) 
+    rotation_vec = np.random.randn(3) - com
+
     pass
 
 def MC_alignment(target_ca_arr, input_ca_arr, input_coord_arr, \
