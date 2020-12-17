@@ -67,16 +67,28 @@ def MC_rotation(ca_arr, stepsize):
     pass
 
 def MC_alignment(target_arr, input_arr, steps, stepsize, tol):
+    # RMSD array for plotting
+    RMSD_arr = np.zeros(steps)
+    # initial RMSD
+    RMSD_i = get_RMSD(target_arr, input_arr)
     for i in range(steps):
         # propose a random move
         tr_vec = MC_translation(stepsize)
         input_arr_proposed = input_arr + tr_vec
-        # check RMSD for convergence
         RMSD = get_RMSD(target_arr, input_arr_proposed)
-        if RMSD < tol:
-            break
+        # if RMSD is decreasing
+        if RMSD < RMSD_i:
+            # set new limit
+            RMSD_i = RMSD
+            # check convergence
+            if RMSD < tol:
+                break
+        else:
+            # reject the move
+            input_arr_proposed -= tr_vec
+        RMSD_arr[i] = RMSD_i
 
-    return input_arr_proposed
+    return input_arr_proposed, RMSD_arr
 
 if __name__ == "__main__":
     # getting inputs
@@ -90,7 +102,11 @@ if __name__ == "__main__":
     # output the aligned structure to pdb
     #input_pdb.seek(0)
     #write_to_pdb(input_pdb, input_atom, output_pdb)
-    RMSD_test = get_RMSD(target_atom, input_atom)
-    print("the RMSD is:%f A"%RMSD_test)
+
+    # Monte Carlo alignment
+    steps = 100
+    stepsize = 1
+    tol = 0.01
+    input_aligned = MC_alignment(target_ca, input_ca, steps, stepsize, tol)
 
     pass
