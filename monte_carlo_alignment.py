@@ -55,20 +55,28 @@ def get_RMSD(target, input):
     return RMSD
 
 # Monte Carlo functions
-def MC_translation(ca_arr, stepsize):
+def MC_translation(stepsize):
     translation_vec = np.zeros(3)
     translation_vec[0] = np.random.randn() * stepsize
     translation_vec[1] = np.random.randn() * stepsize
     translation_vec[2] = np.random.randn() * stepsize
-    ca_arr_tr = ca_arr + translation_vec
-    
-    return ca_arr_tr
+
+    return translation_vec
 
 def MC_rotation(ca_arr, stepsize):
     pass
 
-def MC_alignment(target_arr, input_arr, steps, stepsize):
-    pass
+def MC_alignment(target_arr, input_arr, steps, stepsize, tol):
+    for i in range(steps):
+        # propose a random move
+        tr_vec = MC_translation(stepsize)
+        input_arr_proposed = input_arr + tr_vec
+        # check RMSD for convergence
+        RMSD = get_RMSD(target_arr, input_arr_proposed)
+        if RMSD < tol:
+            break
+
+    return input_arr_proposed
 
 if __name__ == "__main__":
     # getting inputs
