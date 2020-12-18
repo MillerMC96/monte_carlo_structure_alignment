@@ -2,6 +2,7 @@
 # python script for structure alignment using Monte Carlo method               #
 # Author: Panyue Wang                                                          #
 # Email: pywang@ucdavis.edu                                                    #
+# Usage: python monte_carlo_alignment.py input_pdb target_pdb output_pdb       #
 ################################################################################
 import numpy as np
 import matplotlib.pyplot as plt
